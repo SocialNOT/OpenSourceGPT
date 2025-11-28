@@ -1,0 +1,7 @@
+{
+  "name": "SocialNOT",
+  "description": "An all-in-one creative suite powered by the Gemini API. Generate text, images, and videos, have real-time conversations, and leverage advanced AI tools for complex tasks.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
