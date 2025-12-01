@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SocialNOT</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: ['class', '[data-theme="dark"]'],
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--c-primary)',
+              dim: 'var(--c-dim)',
+              bg: 'var(--c-bg)',
+              panel: 'var(--c-panel)',
+              alert: 'var(--c-alert)',
+              secondary: 'var(--c-secondary)',
+              inv: 'var(--c-inv)',
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* THEME ENGINE */
+      :root {
+        /* DEFAULT (LIGHT MODE / PAPER TERMINAL) */
+        --c-bg: #f2f4f6;
+        --c-panel: #ffffff;
+        --c-primary: #00681c; /* Darker green for contrast on light bg */
+        --c-dim: #5c7a5c;     /* Darker grey-green for visible placeholders/borders */
+        --c-alert: #cc0029;
+        --c-secondary: #b37b00;
+        --c-inv: #ffffff;
+        --terminal-font: 'RetroMono', monospace;
+      }
+
+      :root[data-theme="dark"] {
+        /* DARK MODE (NEO-TOKYO) */
+        --c-bg: #050505;
+        --c-panel: #001100;
+        --c-primary: #00ff41;
+        --c-dim: #005c16;     /* Brighter deep green for visible placeholders/borders */
+        --c-alert: #ff003c;
+        --c-secondary: #ffb000;
+        --c-inv: #000000;
+      }
+
+      @font-face {
+        font-family: 'RetroMono';
+        src: local('Courier New'), local('Courier'), monospace;
+      }
+
+      body {
+        background-color: var(--c-bg);
+        color: var(--c-primary);
+        font-family: var(--terminal-font);
+        overflow: hidden;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      /* CRT Grid Background */
+      .crt-grid {
+        background-image: 
+          linear-gradient(var(--c-dim) 1px, transparent 1px),
+          linear-gradient(90deg, var(--c-dim) 1px, transparent 1px);
+        background-size: 20px 20px;
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: -2;
+        opacity: 0.2;
+        pointer-events: none;
+      }
+
+      /* Scanline Effect */
+      .scanlines {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0) 50%,
+          rgba(0, 0, 0, 0.1) 50%,
+          rgba(0, 0, 0, 0.1)
+        );
+        background-size: 100% 4px;
+        z-index: 50;
+        pointer-events: none;
+        opacity: 0.3;
+      }
+
+      /* Terminal Utilities */
+      .term-panel {
+        background: var(--c-panel);
+        border: 2px solid var(--c-dim);
+        box-shadow: 4px 4px 0px var(--c-dim);
+        transition: all 0.3s;
+      }
+
+      .term-input {
+        background: var(--c-panel);
+        border: 2px solid var(--c-dim);
+        color: var(--c-primary);
+        font-family: var(--terminal-font);
+        transition: all 0.2s;
+      }
+      
+      .term-input:focus {
+        border-color: var(--c-primary);
+        outline: none;
+        box-shadow: 0 0 10px var(--c-dim);
+      }
+      
+      .term-input::placeholder {
+        color: var(--c-dim);
+        opacity: 1;
+      }
+
+      .term-btn {
+        background: var(--c-dim);
+        color: var(--c-primary);
+        border: 2px solid var(--c-primary);
+        text-transform: uppercase;
+        font-weight: bold;
+        transition: all 0.1s;
+        cursor: pointer;
+      }
+
+      .term-btn:hover:not(:disabled) {
+        background: var(--c-primary);
+        color: var(--c-inv);
+      }
+
+      .term-btn:active:not(:disabled) {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+
+      .term-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--c-bg);
+        border-left: 1px solid var(--c-dim);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--c-dim);
+        border: 1px solid var(--c-primary);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--c-primary);
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "vite": "https://aistudiocdn.com/vite@^7.2.6",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <div class="scanlines"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
